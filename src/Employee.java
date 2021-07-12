@@ -1,16 +1,19 @@
-public class Employee {
+public abstract class Employee {
     private String name;
     private String adress;
     private int id;
     private PaymentMethod payment;
     private boolean syndicate;
+    private Double taxSyndicate;
+    private Double taxService;
     //private int maior=0;
 
-    Employee(String name, String adress, int id){
+    Employee(String name, String adress, int id, Double taxSyndicate){
         this.name=name;
         this.adress= adress;
         this.id= id;
         this.syndicate= false;
+        this.taxSyndicate= taxSyndicate;
     }
     public void setName(String name) {
         this.name = name;
@@ -21,7 +24,7 @@ public class Employee {
     public void setId(int id) {
         this.id = id;
     }
-    public void setSyndicate(boolean syndicate) {
+    public void setSyndicate(boolean syndicate){
         this.syndicate = syndicate;
     }
     public String getName() {
@@ -45,7 +48,18 @@ public class Employee {
     public String typeEmployee(){
         return "Employee";
     }
-    
+    public void setTaxService(Double taxService) {
+        this.taxService = taxService;
+    }
+    public Double getTaxService() {
+        return taxService;
+    }
+    public void setTaxSyndicate(Double taxSyndicate) {
+        this.taxSyndicate = taxSyndicate;
+    }
+    public Double getTaxSyndicate() {
+        return taxSyndicate;
+    }
     public String printInfo(){
         return "Name Employee: "+name+"\nAdress Employee: "+adress+"\nID Employee: "+id+"\nType Employee: "+this.typeEmployee()+"\n";
     }

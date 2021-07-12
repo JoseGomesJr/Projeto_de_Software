@@ -1,7 +1,7 @@
 public class Salaried extends Employee {
     private Double monthly_salary;
-    Salaried(String name, String adress, int id, Double salary){
-        super(name, adress, id);
+    Salaried(String name, String adress, int id, Double salary, Double taxSyndicate){
+        super(name, adress, id, taxSyndicate);
         monthly_salary=salary;
     }
     public void setMonthly_salary(Double monthly_salary) {

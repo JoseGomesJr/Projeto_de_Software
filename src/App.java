@@ -10,6 +10,9 @@ public class App {
             System.out.println("1-New employee");
             System.out.println("2-Remove employee");
             System.out.println("3-Report time card");
+            System.out.println("4-Sales result");
+            System.out.println("5-Additional union fee");
+            System.out.println("6-Changing an employee's data");
             System.out.println("0-Exit");
             nSelect= input.nextInt();
            switch (nSelect) {
@@ -22,7 +25,15 @@ public class App {
                 case 3:
                     employees.Timecard();
                     continue;
-                
+                case 4:
+                    employees.Salles();
+                    continue;
+                case 5:
+                    employees.TaxService();
+                    continue;
+                case 6:
+                    employees.ChangerEmployee();
+                    continue;
 
                default:
                    break;
@@ -31,7 +42,7 @@ public class App {
         }while(nSelect!=0);
 
         employees.printList();
-        employees.Infotime();
+        //employees.Infotime();
         employees.getSyndicatelist();
         input.close();
     }

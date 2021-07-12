@@ -31,5 +31,6 @@ public class PayFunction {
         int numbeAccount= input.nextInt();
         this.pMethod= new PaymentMethod("Bank Account", numbeAccount, nameBank, typeAccount);
     }
+    
 
 }

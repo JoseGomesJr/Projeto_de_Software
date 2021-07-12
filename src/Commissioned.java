@@ -1,11 +1,16 @@
+import java.util.*;
+
 public class Commissioned extends Employee {
     private Double monthly_salary;
     private Double commission;
-    Commissioned(String name, String adress, int id, Double salary, Double commission)
+    private Double comissionTotal;
+    private List<String> dates= new ArrayList<>();
+    Commissioned(String name, String adress, int id, Double salary, Double commission, Double taxSyndicate)
     {
-        super(name, adress, id);
+        super(name, adress, id, taxSyndicate);
         this.monthly_salary= salary;
         this.commission= commission;
+        this.comissionTotal=0d;
     }
     public void setMonthly_salary(Double monthly_salary) {
         this.monthly_salary = monthly_salary;
@@ -18,6 +23,10 @@ public class Commissioned extends Employee {
     }
     public Double getCommission() {
         return commission;
+    }
+    public void setComissionTotal(Double valor, String date) {
+       comissionTotal+=valor*(commission/100);
+       dates.add(date);
     }
     @Override
     public String typeEmployee(){
