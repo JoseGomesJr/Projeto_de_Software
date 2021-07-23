@@ -5,7 +5,7 @@ public abstract class Employee {
     private PaymentMethod payment;
     private boolean syndicate;
     private Double taxSyndicate;
-    private Double taxService;
+    private Double taxService=0d;
     //private int maior=0;
 
     Employee(String name, String adress, int id, Double taxSyndicate){
@@ -45,9 +45,8 @@ public abstract class Employee {
     public PaymentMethod getPayment() {
         return this.payment;
     }
-    public String typeEmployee(){
-        return "Employee";
-    }
+    public abstract String typeEmployee();
+
     public void setTaxService(Double taxService) {
         this.taxService = taxService;
     }
@@ -63,4 +62,5 @@ public abstract class Employee {
     public String printInfo(){
         return "Name Employee: "+name+"\nAdress Employee: "+adress+"\nID Employee: "+id+"\nType Employee: "+this.typeEmployee()+"\n";
     }
+    public abstract Double payMent();
 }

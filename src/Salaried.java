@@ -10,10 +10,15 @@ public class Salaried extends Employee {
     public Double getMonthly_salary() {
         return monthly_salary;
     }
-    @Override
     public String typeEmployee(){
         return "Salaried";
     }
-
+    public Double payMent() {
+        Double paytotal= monthly_salary-(monthly_salary*(this.getTaxSyndicate()/100));
+       if(this.getTaxService()!=0){
+        paytotal= paytotal-(paytotal*(this.getTaxService()/100));
+       }
+       return paytotal;
+    }
 
 }

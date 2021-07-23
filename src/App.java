@@ -2,6 +2,7 @@ import java.util.*;
 public class App {
     public static void main(String[] args) throws Exception {
         EmployeeList employees= new EmployeeList();
+        PayFunction payFunction= new PayFunction();
         Scanner input= new Scanner(System.in);
         int nSelect=0;
         do
@@ -13,6 +14,9 @@ public class App {
             System.out.println("4-Sales result");
             System.out.println("5-Additional union fee");
             System.out.println("6-Changing an employee's data");
+            System.out.println("7-Payroll Wheel.");
+            System.out.println("8-Change employee's pay schedule");
+            System.out.println("9-Registered employees");
             System.out.println("0-Exit");
             nSelect= input.nextInt();
            switch (nSelect) {
@@ -34,14 +38,22 @@ public class App {
                 case 6:
                     employees.ChangerEmployee();
                     continue;
-
+                case 7:
+                    employees.pay();
+                    continue;
+                case 8:
+                    employees.scheduleoptions();
+                    continue;
+                case 9:
+                    employees.printList();
+                    continue;
                default:
                    break;
            }
            
         }while(nSelect!=0);
 
-        employees.printList();
+        
         //employees.Infotime();
         employees.getSyndicatelist();
         input.close();

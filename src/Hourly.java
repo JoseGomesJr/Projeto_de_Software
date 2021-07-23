@@ -1,20 +1,22 @@
 public class Hourly extends Employee {
-    private int hours;
-    private int taxhours;
-    private Double hoursDay[];
+    private Double hours;
+    private Double taxhours;
+    private Double hoursDay;
+    private Double pay;
     private TimeCard card= new TimeCard();
-    public Hourly(String name, String adress, int id, int hours, Double taxSyndicate){
+    public Hourly(String name, String adress, int id, Double hours, Double taxSyndicate){
         super(name, adress, id, taxSyndicate);
         this.hours=hours;
-        this.taxhours=0;
+        this.taxhours=1.5;
+        this.pay=0d;
     }
-    public void setHours(int hours){
+    public void setHours(Double hours){
         this.hours = hours;
     }
-    public int getHours() {
+    public Double getHours() {
         return hours;
     }
-    public int getTaxhours() {
+    public Double getTaxhours() {
         return taxhours;
     }
     public void setEntryCard( ) {
@@ -26,14 +28,29 @@ public class Hourly extends Employee {
     public void Cardinf(){
         card.getDateInfo();
     }
-    public void setHoursDay(int day) {
-        if(day>1 && day<7){
-            this.hoursDay[day]=card.InforHoras();
+    public void setHoursDay() {
+        this.hoursDay=card.InforHoras();
+        if(hoursDay>8){
+            Double ext= hoursDay-8d;
+            ext= ext*(taxhours*hours);
+            this.pay=(8d*hours)+ext;
+        }
+        else{
+            this.pay=(hoursDay*hours);
         }
     }
-    @Override
     public String typeEmployee(){
         return "Hourly";
+    }
+    public Double payMent() {
+
+       Double paytotal= pay-(pay*(this.getTaxSyndicate()/100d));
+       if(this.getTaxService()!=0){
+        paytotal= paytotal-(paytotal*(this.getTaxService()/100d));
+       }
+       this.hoursDay=0d;
+       this.pay=0d;
+       return paytotal;
     }
 
 }

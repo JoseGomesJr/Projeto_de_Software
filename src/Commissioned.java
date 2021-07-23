@@ -28,8 +28,17 @@ public class Commissioned extends Employee {
        comissionTotal+=valor*(commission/100);
        dates.add(date);
     }
-    @Override
     public String typeEmployee(){
         return "Commssioned";
+    }
+    public Double payMent() {
+        Double paytotal= monthly_salary-(monthly_salary*(this.getTaxSyndicate()/100));
+        if(this.getTaxService()!=0){
+         paytotal= paytotal-(paytotal*(this.getTaxService()/100));
+        }
+        paytotal+=comissionTotal;
+        this.comissionTotal=0d;
+        return paytotal;
+        
     }
 }

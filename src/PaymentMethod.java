@@ -1,6 +1,7 @@
 public class PaymentMethod {
     private String method;
     private PayBanck bank;
+    private PayDay pDay;
     public PaymentMethod(String method){
         this.method= method;
     }
@@ -22,6 +23,12 @@ public class PaymentMethod {
     }
     public String Banck(){
         return this.bank.getBank();
+    }
+    public void setpDay(PayDay pDay) {
+        this.pDay = pDay;
+    }
+    public PayDay getpDay() {
+        return pDay;
     }
     
 }

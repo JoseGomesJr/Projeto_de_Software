@@ -24,7 +24,7 @@ public class ChangeEmployee {
                     break;
                 }
                 System.out.println("Hourly wage");
-                int hours= input.nextInt();
+                Double hours= input.nextDouble();
                 employee= new Hourly(employee.getName(), employee.getAdress(), employee.getId(), hours, employee.getTaxSyndicate());
                 employee.setPayment(auxPay);
                 break;
@@ -56,5 +56,6 @@ public class ChangeEmployee {
         }
         return employee;
     }
+
     
 }

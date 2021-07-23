@@ -75,7 +75,7 @@ public class AuxEmployee {
     public void AddSyndicate(Employee employee, List<Syndicate> syndicates){
         Scanner input= new Scanner(System.in);
         Syndicate unionlist;
-        System.out.println("Is the new employee part of the union?1-Yes\n2-No");
+        System.out.println("Is the new employee part of the union?\n1-Yes\n2-No");
         int nSelect= input.nextInt();
         if(nSelect==1){
             System.out.println("What is the employee union id?");
@@ -97,7 +97,7 @@ public class AuxEmployee {
                     break;
                 case 2:
                     ((Hourly)employees.get(id)).setExitCard();
-                    ((Hourly)employees.get(id)).setHoursDay(day());
+                    ((Hourly)employees.get(id)).setHoursDay();
                     break;
                 default:
                     System.out.println("None of the options were selected, you will return to the start menu");

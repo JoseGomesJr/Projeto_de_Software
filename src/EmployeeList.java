@@ -24,7 +24,7 @@ public class EmployeeList {
        switch (num) {
            case 1:
                 System.out.println("Hourly wage");
-                int hours= input.nextInt();
+                Double hours= input.nextDouble();
                 employee= new Hourly(name,adress,id,hours, taxSyndicate);
              
             break;
@@ -50,6 +50,7 @@ public class EmployeeList {
        }
        AuxEmployee.AddSyndicate(employee, syndicatelist);
        employee.setPayment(payFunction.AddMethod());
+       payFunction.Schedule(employee.getPayment(), employee.typeEmployee());
        employeelist.add(employee);
     }
     public void printList()
@@ -65,10 +66,15 @@ public class EmployeeList {
     public void removeEmployee()
     {
         int id= AuxEmployee.SearchEmployeeList(employeelist);
+        int idsyn;
         // remover o empregado da lista de sindicatos
         if(id!=-1) {
-
+            if(employeelist.get(id).getSyndicate()==true){
+                idsyn=AuxEmployee.SeachSyndicate(syndicatelist, employeelist.get(id));
+                syndicatelist.remove(idsyn);
+            }
             employeelist.remove(id);
+
         }
         else{
             System.out.println("The data entered is not associated with any employee");
@@ -206,6 +212,23 @@ public class EmployeeList {
         else{
             System.out.println("The data entered is not associated with any employee");
         }
+    }
+    public void pay(){
+        payFunction.payment(employeelist);
+    }
+    public void scheduleoptions(){
+        Scanner input= new Scanner(System.in);
+        System.out.println("Select the employee you want to change");
+        int idname= AuxEmployee.SearchEmployeeList(employeelist);
+        if(idname!=-1){
+            payFunction.PaymentSchedule(employeelist.get(idname).getPayment()); 
+        }
+        else{
+            System.out.println("The data entered is not associated with any employee");
+        }
+    }
+    public void addSchedule(){
+        
     }
 
 }
