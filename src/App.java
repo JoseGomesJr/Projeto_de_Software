@@ -47,6 +47,9 @@ public class App {
                 case 9:
                     employees.printList();
                     continue;
+                case 10:
+                    employees.addSchedule();
+                    continue;
                default:
                    break;
            }

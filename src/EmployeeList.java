@@ -151,7 +151,7 @@ public class EmployeeList {
             System.out.println("2-Change employee address");
             System.out.println("3-Change employee type");
             System.out.println("4-Change employee payment method");
-            System.out.println("5-Remove a union member");
+            System.out.println("5-Remove a union member / Make an employee part of the union");
             System.out.println("6-Change union ID");
             System.out.println("7-Change the union fee");
             int nSelect= input.nextInt();
@@ -185,7 +185,25 @@ public class EmployeeList {
                     employeelist.get(idname).setPayment(payFunction.AddMethod());
                    break;
                 case 5:
-                   AuxEmployee.RemoveSyndicate(employeelist.get(idname), syndicatelist);
+                
+                   if(!employeelist.get(idname).getSyndicate()){
+
+                        System.out.println("Employee is not part of the union, would you like to add?\n1-Yes\n2-No");
+                        int select= input.nextInt();
+                        if(select==1){
+                            AuxEmployee.AddSyndicate(employeelist.get(idname), syndicatelist);
+                        }
+                   }
+                   else
+                   {
+                        System.out.println("Does the employee part of the union wish to remove?\n1-Yes\n2-No");
+                        int select= input.nextInt();
+                        if(select==1){
+                            AuxEmployee.RemoveSyndicate(employeelist.get(idname), syndicatelist);
+                        }
+                        
+                   }
+                   
                    break;
                 case 6:
                     int id= AuxEmployee.SeachSyndicate(syndicatelist, employeelist.get(idname));
@@ -228,7 +246,9 @@ public class EmployeeList {
         }
     }
     public void addSchedule(){
-        
+        Scanner input= new Scanner(System.in);
+        String schedule= input.nextLine();
+        payFunction.addSchedule(schedule);
     }
 
 }

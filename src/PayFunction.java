@@ -3,8 +3,8 @@ import java.util.*;
 
 public class PayFunction {
     private PaymentMethod pMethod;
-    private PayDay pDay= new PayDay();
-    
+    private PayDay pay= new PayDay();
+
     public PaymentMethod AddMethod(){
         Scanner input= new Scanner(System.in);
         System.out.printf("Select a payment method:\n1-Check by post\n2-Check in hand\n3-Bank Account\n");
@@ -13,14 +13,17 @@ public class PayFunction {
             case 1:
                 this.pMethod= new PaymentMethod("Check by post");
                 break;
+                
             case 2:
                 this.pMethod= new PaymentMethod("Check in hand");
                 break;
+                
             case 3:
                 PayBanck();
-                break;    
-            default:
                 break;
+                    
+            default:
+            break;
         }
        return this.pMethod;
     }
@@ -36,21 +39,21 @@ public class PayFunction {
         this.pMethod= new PaymentMethod("Bank Account", numbeAccount, nameBank, typeAccount);
     }
     public void Schedule(PaymentMethod payment, String type){
-        PayDay pay= new PayDay();
+        //PayDay pay= new PayDay();
         switch (type) {
             case "Hourly":
-                pay.setOption(0);
-                break;
+                payment.setOptionschedule(0);
+                
             case "Salaried":
-                pay.setOption(2);
-                break;
+                payment.setOptionschedule(2);
+                
             case "Commssioned":
-                pay.setOption(1);
-                break;
+                payment.setOptionschedule(1);
+                
             default:
-                break;
+                
         }
-        payment.setpDay(pay);
+        //payment.setpDay(pay);
     }
     private void printPayEmployee(Employee employee){
         System.out.println("----EMPLOYEE----");
@@ -80,14 +83,14 @@ public class PayFunction {
     public void payment(List<Employee> employees)
     {
        for(Employee employee: employees){
-            String payString= employee.getPayment().getpDay().opitionString();
+            String payString= pay.opitionString(employee.getPayment().getOptionschedule());
             String aux[]= payString.split(" ");
             int week;
             switch (aux[0]) {
                 case "WEEKLY":
                     week= Integer.parseInt(aux[1]);
                     payString(aux[2], week, employee);
-                    break;
+                    
                 case "MONTLHY":
                     if(aux[1].equals("$")){
                         monthly(employee);
@@ -96,9 +99,9 @@ public class PayFunction {
                         week= Integer.parseInt(aux[1]);
                         payMONTH(week, employee);
                     }
-                    break;
+                    
                 default:
-                    break;
+                    
             }
        }
     }
@@ -121,7 +124,6 @@ public class PayFunction {
     }
     public void PaymentSchedule(PaymentMethod payment){
         Scanner input= new Scanner(System.in);
-        PayDay pay= payment.getpDay();
         int option=0;
         System.out.println("Options:");
         for(String schedule: pay.getSchedule()){
@@ -134,8 +136,59 @@ public class PayFunction {
             System.out.println("None of the options were selected, you will return to the start menu");
         }
         else{
-            payment.getpDay().setOption(selectoption);
+            payment.setOptionschedule(selectoption);
         }
+    }
+    public boolean dayweek(String day){
+        switch (day) {
+            case "SUNDAY":
+                return true;
+                
+            case "MONDAY":
+                return true;
+                
+            case "TUESDAY":
+                return true;
+                
+            case "WEDNESDAY":
+                return true;
+                
+            case "THURSDAY":
+                return true;
+                
+            case "FRIDAY":
+                return true;
+                
+            case "SATURDAY":
+                return true;
+                
+            default:
+                return false;
+        }
+    }
+    public void addSchedule(String schedule){
+        String aux[]= schedule.split(" ");
+        if(aux[0].equals("WEEKLY")){
+            if(!aux[1].matches("-?\\d+") && !dayweek(aux[2])){
+                System.out.println("Invalid input please inform correctly.");
+                return;
+            }
+            else{
+                pay.addSchedulle(schedule);
+            }
+        }
+        else if(aux[0].equals("MONTLHY")){
 
+            if(!aux[1].matches("-?\\d+") && aux[1] != "$"){
+                System.out.println("Invalid input please inform correctly.");
+                return;
+            }
+            else{
+                pay.addSchedulle(schedule);
+            }
+        }
+        else{
+            System.out.println("Invalid input please inform correctly.");
+        }
     }
 }

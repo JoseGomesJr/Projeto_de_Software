@@ -2,6 +2,7 @@ public class PaymentMethod {
     private String method;
     private PayBanck bank;
     private PayDay pDay;
+    private int optionschedule;
     public PaymentMethod(String method){
         this.method= method;
     }
@@ -30,5 +31,10 @@ public class PaymentMethod {
     public PayDay getpDay() {
         return pDay;
     }
-    
+    public int getOptionschedule() {
+        return optionschedule;
+    }
+    public void setOptionschedule(int optionschedule) {
+        this.optionschedule = optionschedule;
+    }
 }

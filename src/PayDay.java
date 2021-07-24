@@ -4,12 +4,10 @@ public class PayDay {
     private List<String> schedule= new ArrayList<>();
     private int day;
     private int week;
-    private int option;
     PayDay(){
         this.schedule.add("WEEKLY 1 FRIDAY");
         this.schedule.add("WEEKLY 2 FRIDAY");
         this.schedule.add("MONTLHY $");
-
     }
     public void addSchedulle(String schedule){
         this.schedule.add(schedule);
@@ -20,9 +18,6 @@ public class PayDay {
     public void setWeek(int week) {
         this.week = week;
     }
-    public void setOption(int option) {
-        this.option = option;
-    }
     public int getDay() {
         return day;
     }
@@ -32,8 +27,8 @@ public class PayDay {
     public List<String> getSchedule() {
         return schedule;
     }
-    public String opitionString(){
-        return schedule.get(option);
+    public String opitionString(int select){
+        return schedule.get(select);
     }
 
 }
