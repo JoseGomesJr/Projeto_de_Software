@@ -13,11 +13,12 @@ public class Salaried extends Employee {
     public String typeEmployee(){
         return "Salaried";
     }
-    public Double payMent() {
-        Double paytotal= monthly_salary-(monthly_salary*(this.getTaxSyndicate()/100));
+    public Double payMent(int division) {
+        Double paytotal= (monthly_salary/division)-((monthly_salary/division)*(this.getTaxSyndicate()/100));
        if(this.getTaxService()!=0){
         paytotal= paytotal-(paytotal*(this.getTaxService()/100));
        }
+       this.setTaxService(0d);
        return paytotal;
     }
 

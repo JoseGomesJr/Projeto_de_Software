@@ -27,22 +27,26 @@ public class Hourly extends Employee {
     }
     public void Cardinf(){
         card.getDateInfo();
+        System.out.println(pay);
+    }
+    public TimeCard getCard() {
+        return card;
     }
     public void setHoursDay() {
         this.hoursDay=card.InforHoras();
         if(hoursDay>8){
             Double ext= hoursDay-8d;
             ext= ext*(taxhours*hours);
-            this.pay=(8d*hours)+ext;
+            this.pay+=(8d*hours)+ext;
         }
         else{
-            this.pay=(hoursDay*hours);
+            this.pay+=(hoursDay*hours);
         }
     }
     public String typeEmployee(){
         return "Hourly";
     }
-    public Double payMent() {
+    public Double payMent(int division) {
 
        Double paytotal= pay-(pay*(this.getTaxSyndicate()/100d));
        if(this.getTaxService()!=0){
@@ -50,7 +54,22 @@ public class Hourly extends Employee {
        }
        this.hoursDay=0d;
        this.pay=0d;
+       this.setTaxService(0d);
        return paytotal;
     }
-
+    public Double getPay() {
+        return pay;
+    }
+    public void setPay(Double pay) {
+        this.pay = pay;
+    }
+    public void resetTime(){
+        this.card= new TimeCard();
+    }
+    public void resetEntry(){
+        this.card.resetEntry();
+    }
+    public void resetExit(){
+        this.card.resetExit();
+    }
 }

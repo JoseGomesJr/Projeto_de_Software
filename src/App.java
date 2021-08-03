@@ -17,6 +17,7 @@ public class App {
             System.out.println("7-Payroll Wheel.");
             System.out.println("8-Change employee's pay schedule");
             System.out.println("9-Registered employees");
+            System.out.println("10-Registered employees");
             System.out.println("0-Exit");
             nSelect= input.nextInt();
            switch (nSelect) {
@@ -50,6 +51,12 @@ public class App {
                 case 10:
                     employees.addSchedule();
                     continue;
+                case 11:
+                    employees.undo();
+                    continue;
+                case 12:
+                    employees.Infotime();
+                    continue;                
                default:
                    break;
            }

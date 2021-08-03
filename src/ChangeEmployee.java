@@ -1,5 +1,6 @@
 import java.util.*;
 public class ChangeEmployee {
+    private AuxEmployee AuxEmployee= new AuxEmployee();
     public void ChangeName(Employee employee){
         Scanner input= new Scanner(System.in);
         System.out.println("Write the new name:");
@@ -56,6 +57,24 @@ public class ChangeEmployee {
         }
         return employee;
     }
-
+    public void Changer(int idname, List<Employee> employeelist, List<Syndicate> syndicatelist){
+        Employee employee;
+        if(employeelist.get(idname).getSyndicate()==false){
+            employee=employeelist.get(idname);
+            employeelist.remove(idname);
+            employeelist.add(idname, ChangerTypeEmployee(employee));
+        }
+        else{
+             int id= AuxEmployee.SeachSyndicate(syndicatelist, employeelist.get(idname));
+             employee=employeelist.get(idname);
+             employeelist.remove(idname);
+             employeelist.add(idname, ChangerTypeEmployee(employee));
+             if(id!=-1) {
+                 int idsyndicate=syndicatelist.get(id).getId();
+                 syndicatelist.remove(id);
+                 AuxEmployee.AddSyndicate(employeelist.get(idname), syndicatelist, idsyndicate);
+             }
+        }
+    }
     
 }

@@ -43,22 +43,24 @@ public class PayFunction {
         switch (type) {
             case "Hourly":
                 payment.setOptionschedule(0);
-                
+                break;
             case "Salaried":
                 payment.setOptionschedule(2);
-                
+                break;
             case "Commssioned":
                 payment.setOptionschedule(1);
-                
+                break;
             default:
-                
+               break; 
         }
         //payment.setpDay(pay);
     }
-    private void printPayEmployee(Employee employee){
+    private void printPayEmployee(Employee employee, int divsion){
         System.out.println("----EMPLOYEE----");
         System.out.println(employee.getName()+"\n"+employee.getId());
-        System.out.println("The salary amount based on the calculations made is"+employee.payMent());
+        if(divsion==1) divsion=4;
+        else if(divsion==0) divsion=1;
+        System.out.println("The salary amount based on the calculations made is "+employee.payMent(divsion));
         System.out.println(employee.getPayment().InfoPay());
     }
     private void payString(String day, int week, Employee employee){
@@ -67,17 +69,17 @@ public class PayFunction {
         Calendar calendar= Calendar.getInstance();
         int weeknow = calendar.get(Calendar.WEEK_OF_MONTH);
         if(day.equals(daynow) && week==weeknow){
-            printPayEmployee(employee);
+            printPayEmployee(employee, week);
         }
         else if(day.equals(daynow) && week==1){
-            printPayEmployee(employee);
+            printPayEmployee(employee, week);
         }
     }
     private void payMONTH( int day, Employee employee){
         Calendar calendar= Calendar.getInstance();
         int daynow = calendar.get(Calendar.DAY_OF_MONTH);
        if(day==daynow){
-            printPayEmployee(employee);
+            printPayEmployee(employee, 0);
        }
     }
     public void payment(List<Employee> employees)
@@ -87,10 +89,11 @@ public class PayFunction {
             String aux[]= payString.split(" ");
             int week;
             switch (aux[0]) {
+
                 case "WEEKLY":
                     week= Integer.parseInt(aux[1]);
                     payString(aux[2], week, employee);
-                    
+                    break;
                 case "MONTLHY":
                     if(aux[1].equals("$")){
                         monthly(employee);
@@ -99,16 +102,16 @@ public class PayFunction {
                         week= Integer.parseInt(aux[1]);
                         payMONTH(week, employee);
                     }
-                    
+                    break;
                 default:
-                    
+                    break;
             }
        }
     }
     private void monthly(Employee employee){
         Calendar calendar= Calendar.getInstance();
         if(calendar.getTime().equals(getUltimoDiaUtilDoMes(calendar).getTime())){
-            printPayEmployee(employee);
+            printPayEmployee(employee, 0);
         }
     }
     private static Calendar getUltimoDiaUtilDoMes(Calendar calendar) {

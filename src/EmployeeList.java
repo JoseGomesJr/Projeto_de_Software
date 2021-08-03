@@ -6,6 +6,7 @@ public class EmployeeList {
     private PayFunction payFunction= new PayFunction();
     private AuxEmployee AuxEmployee= new AuxEmployee();
     private ChangeEmployee change= new ChangeEmployee();
+    private Undo rUndo= new Undo();
     public void novo(){
         Scanner input= new Scanner(System.in);
 
@@ -45,13 +46,15 @@ public class EmployeeList {
             break;
 
            default:
-           System.out.println("None of the options were selected, you will return to the start menu");
-            break;
+            System.out.println("None of the options were selected, you will return to the start menu");
+            return;
        }
        AuxEmployee.AddSyndicate(employee, syndicatelist);
        employee.setPayment(payFunction.AddMethod());
        payFunction.Schedule(employee.getPayment(), employee.typeEmployee());
        employeelist.add(employee);
+       rUndo.Salve(1, employee);
+       
     }
     public void printList()
     {
@@ -71,9 +74,14 @@ public class EmployeeList {
         if(id!=-1) {
             if(employeelist.get(id).getSyndicate()==true){
                 idsyn=AuxEmployee.SeachSyndicate(syndicatelist, employeelist.get(id));
+                rUndo.Salvesyndi(2, employee, idsyn);
                 syndicatelist.remove(idsyn);
+                employeelist.remove(id);
             }
-            employeelist.remove(id);
+            else{
+                rUndo.Salve(2, employee);
+                employeelist.remove(id);
+            }
 
         }
         else{
@@ -90,8 +98,10 @@ public class EmployeeList {
     }
     public void Timecard(){
         int idname= AuxEmployee.SearchEmployeeList(employeelist);
+        int aux;
         if(idname!=-1){
-            AuxEmployee.AddTimecard(employeelist, idname);
+
+            aux=AuxEmployee.AddTimecard(employeelist, idname, rUndo);
         }
         else{
             System.out.println("The data entered is not associated with any employee");
@@ -112,11 +122,13 @@ public class EmployeeList {
         System.out.println("Informs the sales result:");
         if(idname!=-1){
             if(employeelist.get(idname).typeEmployee().equals("Commssioned")){
+
                 System.out.println("Sale value:");
                 Double valor= input.nextDouble();
                 System.out.println("Date:");
                 System.out.println("The date must be informed in the following format : dd/mm/yyyy HH:mm");
                 String date= input.nextLine();
+                rUndo.Salvecommission(4, ((Commissioned) employeelist.get(idname)).getComissionTotal() , date, employeelist.get(idname));
                 ((Commissioned) employeelist.get(idname)).setComissionTotal(valor, date);
             }
             else{
@@ -126,8 +138,6 @@ public class EmployeeList {
         else{
             System.out.println("The data entered is not associated with any employee");
         }
-        
-
     }
     public void TaxService(){
         Scanner input= new Scanner(System.in);
@@ -135,6 +145,7 @@ public class EmployeeList {
         if(idname!=-1){
             System.out.println("Inform the percentage that should be charged to the employee");
             Double tax= input.nextDouble();
+            rUndo.SalveTaxservi(5, employeelist.get(idname).getTaxService(), employee);
             employeelist.get(idname).setTaxService(tax);
 
         }
@@ -163,22 +174,7 @@ public class EmployeeList {
                     change.ChangeAdress(employeelist.get(idname));
                     break;
                 case 3:
-                   if(employeelist.get(idname).getSyndicate()==false){
-                       employee=employeelist.get(idname);
-                       employeelist.remove(idname);
-                       employeelist.add(idname, change.ChangerTypeEmployee(employee));
-                   }
-                   else{
-                        int id= AuxEmployee.SeachSyndicate(syndicatelist, employeelist.get(idname));
-                        employee=employeelist.get(idname);
-                        employeelist.remove(idname);
-                        employeelist.add(idname, change.ChangerTypeEmployee(employee));
-                        if(id!=-1) {
-                            int idsyndicate=syndicatelist.get(id).getId();
-                            syndicatelist.remove(id);
-                            AuxEmployee.AddSyndicate(employeelist.get(idname), syndicatelist, idsyndicate, id);
-                        }
-                   }
+                    change.Changer(idname, employeelist, syndicatelist);
                     break;
                 case 4:
                     System.out.println("Choose new payment method");
@@ -247,8 +243,42 @@ public class EmployeeList {
     }
     public void addSchedule(){
         Scanner input= new Scanner(System.in);
+        System.out.println("Enter new payment schedule:");
         String schedule= input.nextLine();
         payFunction.addSchedule(schedule);
     }
+    public void undo(){
+        int idsyn;
+        switch (rUndo.getSoption()){
+            case 1:
+                if(rUndo.getSemployee().getSyndicate()==true){
+                    idsyn=AuxEmployee.SeachSyndicate(syndicatelist, rUndo.getSemployee());
+                    syndicatelist.remove(idsyn);
+                }
+                employeelist.remove(rUndo.getSemployee());
+                break;
+            case 2:
+                if(rUndo.getSemployee().getSyndicate()==true){
+                    AuxEmployee.AddSyndicate(employee, syndicatelist, rUndo.getIdsyn());
+                    employeelist.add(rUndo.getSemployee());
+                }
+                else{
+                    employeelist.add(rUndo.getSemployee());
+                }
+                break;
+            case 3:
+                rUndo.Time();
+                break;
 
+            case 4:
+                rUndo.comission();
+                break;
+            case 5:
+                rUndo.comission();
+                break;
+            default:
+                break;
+        }
+        rUndo.setSoption(-1);
+    }
 }

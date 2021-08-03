@@ -19,12 +19,20 @@ public class TimeCard {
     }
     public void getDateInfo(){
         DateFormat dtHora = DateFormat.getDateTimeInstance();
-		System.out.println("Entry data: "+dtHora.format(date));
-        System.out.println("Departure data: "+dtHora.format(exitdate));
+		if(date!=null) System.out.println("Entry data: "+dtHora.format(date));
+        if(exitdate!=null) System.out.println("Departure data: "+dtHora.format(exitdate));
     }
     public double InforHoras(){
         Duration duration= Duration.between(entraDate, exiDate);
         return duration.toHours();
     }
-    
+    public void resetEntry(){
+        this.entraDate=null;
+        this.date=null;
+    }
+    public void resetExit(){
+        this.exiDate=null;
+        this.exitdate=null;
+    }
+
 }

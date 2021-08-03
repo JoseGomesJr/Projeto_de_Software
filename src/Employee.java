@@ -62,5 +62,5 @@ public abstract class Employee {
     public String printInfo(){
         return "Name Employee: "+name+"\nAdress Employee: "+adress+"\nID Employee: "+id+"\nType Employee: "+this.typeEmployee()+"\n";
     }
-    public abstract Double payMent();
+    public abstract Double payMent(int division);
 }

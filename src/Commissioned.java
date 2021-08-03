@@ -24,6 +24,15 @@ public class Commissioned extends Employee {
     public Double getCommission() {
         return commission;
     }
+    public List<String> getDates() {
+        return dates;
+    }
+    public void setComissionTotal(Double valor){
+        this.comissionTotal=valor;
+    }
+    public Double getComissionTotal() {
+        return comissionTotal;
+    }
     public void setComissionTotal(Double valor, String date) {
        comissionTotal+=valor*(commission/100);
        dates.add(date);
@@ -31,13 +40,17 @@ public class Commissioned extends Employee {
     public String typeEmployee(){
         return "Commssioned";
     }
-    public Double payMent() {
-        Double paytotal= monthly_salary-(monthly_salary*(this.getTaxSyndicate()/100));
+    public void removdate(String date){
+        dates.remove(date);
+    }
+    public Double payMent(int division) {
+        Double paytotal= (monthly_salary/division)-((monthly_salary/division)*(this.getTaxSyndicate()/100));
         if(this.getTaxService()!=0){
          paytotal= paytotal-(paytotal*(this.getTaxService()/100));
         }
         paytotal+=comissionTotal;
         this.comissionTotal=0d;
+        this.setTaxService(0d);
         return paytotal;
         
     }

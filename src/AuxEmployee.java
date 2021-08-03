@@ -85,20 +85,23 @@ public class AuxEmployee {
            syndicates.add(unionlist);
         }
     }
-    public void AddTimecard(List<Employee> employees, int id){
+    public int AddTimecard(List<Employee> employees, int id, Undo rUndo){
         Scanner input= new Scanner(System.in);
         if(employees.get(id).typeEmployee().equals("Hourly"))
         {
+
             System.out.println("Choose the option:\n1-Entry time\n2-Exit time");
             int nSelect= input.nextInt();
             switch (nSelect) {
                 case 1:
+                    rUndo.Salvetime(3, 0d, employees.get(id), nSelect);
                     ((Hourly)employees.get(id)).setEntryCard();
-                    break;
+                    return 1;
                 case 2:
+                    rUndo.Salvetime(3, ((Hourly)employees.get(id)).getPay(), employees.get(id), nSelect);
                     ((Hourly)employees.get(id)).setExitCard();
                     ((Hourly)employees.get(id)).setHoursDay();
-                    break;
+                    return 2;
                 default:
                     System.out.println("None of the options were selected, you will return to the start menu");
                     break;
@@ -107,7 +110,7 @@ public class AuxEmployee {
         else{
             System.out.println("The employee informed is not an hourly");
         }
-        return;
+        return 0;
     }
     public int day(){
         Calendar calendar= Calendar.getInstance();
@@ -159,11 +162,11 @@ public class AuxEmployee {
         } 
         return aux;
     }
-    public void AddSyndicate(Employee employee, List<Syndicate> syndicates, int id, int local){
+    public void AddSyndicate(Employee employee, List<Syndicate> syndicates, int id){
         Syndicate unionlist;
         employee.setSyndicate(true);
         unionlist= new Syndicate(employee, id);
-        syndicates.add(local,unionlist);
+        syndicates.add(unionlist);
     }
     public void RemoveSyndicate(Employee employee, List<Syndicate> syndicates){
         employee.setSyndicate(false);
