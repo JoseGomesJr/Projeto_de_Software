@@ -2,7 +2,6 @@ import java.util.*;
 public class App {
     public static void main(String[] args) throws Exception {
         EmployeeList employees= new EmployeeList();
-        PayFunction payFunction= new PayFunction();
         Scanner input= new Scanner(System.in);
         int nSelect=0;
         do
@@ -17,7 +16,10 @@ public class App {
             System.out.println("7-Payroll Wheel.");
             System.out.println("8-Change employee's pay schedule");
             System.out.println("9-Registered employees");
-            System.out.println("10-Registered employees");
+            System.out.println("10-Add new payment schedule");
+            System.out.println("11-Undo");
+            System.out.println("12-Employee Timecard Information");
+            System.out.println("13-Current union members");
             System.out.println("0-Exit");
             nSelect= input.nextInt();
            switch (nSelect) {
@@ -56,16 +58,16 @@ public class App {
                     continue;
                 case 12:
                     employees.Infotime();
-                    continue;                
+                    continue;
+                case 13:
+                    employees.getSyndicatelist();
+                    continue;
                default:
                    break;
            }
            
         }while(nSelect!=0);
 
-        
-        //employees.Infotime();
-        employees.getSyndicatelist();
         input.close();
     }
 }

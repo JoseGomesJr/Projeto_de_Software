@@ -1,14 +1,23 @@
-## Getting Started
+<h1 align ="center"> Projeto de Software</h1>
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## Sistema de Folha de Pagamento
 
-## Folder Structure
+ **Checklist com a funções implementadas até o momento:**
+- [x] Adição de um empregado
+- [x] Remoção de um empregado
+- [x] Lançar um Cartão de Ponto
+- [x] Lançar um Resultado Venda
+- [x] Lançar uma taxa de serviço
+- [x] Alterar detalhes de um empregado
+- [x] Rodar a folha de pagamento para hoje
+- [x] Undo
+- [ ] Rendo
+- [x] Agenda de Pagamento
+- [x] Criação de Novas Agendas de Pagamento
 
-The workspace contains two folders by default, where:
+   - O objetivo do projeto é construir um sistema de folha de pagamento. O sistema consiste do
+gerenciamento de pagamentos dos empregados de uma empresa. Além disso, o sistema deve
+gerenciar os dados destes empregados, a exemplo os cartões de pontos. Empregados devem receber
+o salário no momento correto, usando o método que eles preferem, obedecendo várias taxas e
+impostos deduzidos do salário.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).

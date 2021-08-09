@@ -6,6 +6,8 @@ public class EmployeeList {
     private PayFunction payFunction= new PayFunction();
     private AuxEmployee AuxEmployee= new AuxEmployee();
     private ChangeEmployee change= new ChangeEmployee();
+    private boolean pay=false;
+    private int datepay= -1;
     private Undo rUndo= new Undo();
     public void novo(){
         Scanner input= new Scanner(System.in);
@@ -46,25 +48,26 @@ public class EmployeeList {
             break;
 
            default:
-            System.out.println("None of the options were selected, you will return to the start menu");
+            System.out.println(Color.RED+"None of the options were selected, you will return to the start menu"+Color.RESET);
             return;
        }
        AuxEmployee.AddSyndicate(employee, syndicatelist);
        employee.setPayment(payFunction.AddMethod());
        payFunction.Schedule(employee.getPayment(), employee.typeEmployee());
        employeelist.add(employee);
-       rUndo.Salve(1, employee);
+       rUndo.Salve(Undo.NEWEMP, employee);
        
     }
     public void printList()
     {
         for(Employee employees: employeelist)
         {
-            System.out.println("----EMPLOYEE----");
+            System.out.println(Color.BLUE+"----EMPLOYEE----");
             System.out.println(employees.printInfo());
             System.out.println(employees.getPayment().InfoPay()+"\nEmployee belongs to the union: "+employees.getSyndicate());
             
         }
+        System.out.println(Color.RESET);
     }
     public void removeEmployee()
     {
@@ -74,18 +77,19 @@ public class EmployeeList {
         if(id!=-1) {
             if(employeelist.get(id).getSyndicate()==true){
                 idsyn=AuxEmployee.SeachSyndicate(syndicatelist, employeelist.get(id));
-                rUndo.Salvesyndi(2, employee, idsyn);
+                rUndo.Salvesyndi(Undo.REMOVEEMP, employee, idsyn);
                 syndicatelist.remove(idsyn);
                 employeelist.remove(id);
             }
             else{
-                rUndo.Salve(2, employee);
+                rUndo.Salve(Undo.REMOVEEMP, employee);
                 employeelist.remove(id);
             }
+            System.out.println(Color.GREEN+"Employee successfully removed"+Color.RESET);
 
         }
         else{
-            System.out.println("The data entered is not associated with any employee");
+            System.out.println(Color.RED+"The data entered is not associated with any employee"+Color.RESET);
         }
         
     }
@@ -100,11 +104,10 @@ public class EmployeeList {
         int idname= AuxEmployee.SearchEmployeeList(employeelist);
         int aux;
         if(idname!=-1){
-
             aux=AuxEmployee.AddTimecard(employeelist, idname, rUndo);
         }
         else{
-            System.out.println("The data entered is not associated with any employee");
+            System.out.println(Color.RED+"The data entered is not associated with any employee"+Color.RESET);
         }
     }
     public void Infotime(){
@@ -113,7 +116,7 @@ public class EmployeeList {
             AuxEmployee.Printcard(employeelist, idname);
         }
         else{
-            System.out.println("The data entered is not associated with any employee");
+            System.out.println(Color.RED+"The data entered is not associated with any employee"+Color.RESET);
         }
     }
     public void Salles(){
@@ -126,17 +129,18 @@ public class EmployeeList {
                 System.out.println("Sale value:");
                 Double valor= input.nextDouble();
                 System.out.println("Date:");
-                System.out.println("The date must be informed in the following format : dd/mm/yyyy HH:mm");
+                System.out.println(Color.YELLOW+"The date must be informed in the following format : dd/mm/yyyy HH:mm"+Color.RESET);
+                input.nextLine();
                 String date= input.nextLine();
-                rUndo.Salvecommission(4, ((Commissioned) employeelist.get(idname)).getComissionTotal() , date, employeelist.get(idname));
+                rUndo.Salvecommission(Undo.COMISSION, ((Commissioned) employeelist.get(idname)).getComissionTotal() , date, employeelist.get(idname));
                 ((Commissioned) employeelist.get(idname)).setComissionTotal(valor, date);
             }
             else{
-                System.out.println("The employee informed is not a commissioner");
+                System.out.println(Color.RED+"The employee informed is not a commissioner"+Color.RESET);
             }
         }
         else{
-            System.out.println("The data entered is not associated with any employee");
+            System.out.println(Color.RED+"The data entered is not associated with any employee"+Color.RESET);
         }
     }
     public void TaxService(){
@@ -145,12 +149,12 @@ public class EmployeeList {
         if(idname!=-1){
             System.out.println("Inform the percentage that should be charged to the employee");
             Double tax= input.nextDouble();
-            rUndo.SalveTaxservi(5, employeelist.get(idname).getTaxService(), employee);
+            rUndo.SalveTaxservi(Undo.TAXSERVICE, employeelist.get(idname).getTaxService(), employee);
             employeelist.get(idname).setTaxService(tax);
 
         }
         else{
-            System.out.println("The data entered is not associated with any employee");
+            System.out.println(Color.RED+"The data entered is not associated with any employee"+Color.RESET);
         }
     }
     public void ChangerEmployee(){
@@ -168,33 +172,39 @@ public class EmployeeList {
             int nSelect= input.nextInt();
             switch (nSelect) {
                 case 1:
+                    rUndo.Salve(Undo.CHANGERNAME, employeelist.get(idname).getName(), employeelist.get(idname));
                     change.ChangeName(employeelist.get(idname));
                     break;
                 case 2:
+                    rUndo.Salve(Undo.CHANGERADRESS, employeelist.get(idname).getAdress(), employeelist.get(idname));
                     change.ChangeAdress(employeelist.get(idname));
                     break;
                 case 3:
+                    rUndo.Salve(Undo.CHANGERTYPE, employeelist.get(idname));
                     change.Changer(idname, employeelist, syndicatelist);
                     break;
                 case 4:
                     System.out.println("Choose new payment method");
+                    rUndo.Salvepay(Undo.CHANGERPAY, employeelist.get(idname).getPayment(), employeelist.get(idname));
                     employeelist.get(idname).setPayment(payFunction.AddMethod());
                    break;
                 case 5:
                 
                    if(!employeelist.get(idname).getSyndicate()){
 
-                        System.out.println("Employee is not part of the union, would you like to add?\n1-Yes\n2-No");
+                        System.out.println(Color.YELLOW+"Employee is not part of the union, would you like to add?\n1-Yes\n2-No"+Color.RESET);
                         int select= input.nextInt();
                         if(select==1){
+                            rUndo.Salve(Undo.CHANGERSYND, employeelist.get(idname));
                             AuxEmployee.AddSyndicate(employeelist.get(idname), syndicatelist);
                         }
                    }
                    else
                    {
-                        System.out.println("Does the employee part of the union wish to remove?\n1-Yes\n2-No");
+                        System.out.println(Color.YELLOW+"Does the employee part of the union wish to remove?\n1-Yes\n2-No"+Color.RESET);
                         int select= input.nextInt();
                         if(select==1){
+                            rUndo.Salve(Undo.CHANGERSYND, employeelist.get(idname));
                             AuxEmployee.RemoveSyndicate(employeelist.get(idname), syndicatelist);
                         }
                         
@@ -206,39 +216,51 @@ public class EmployeeList {
                     if(id!=-1){
                         System.out.println("Enter the new ID");
                         int newid= input.nextInt();
+                        rUndo.Salveidsyn(Undo.CHANGERIDSYN, syndicatelist.get(id).getId(), id);
                         syndicatelist.get(id).setId(newid);
                     }
                     else{
-                        System.out.println("The data entered is not associated with any unionist");
+                        System.out.println(Color.RED+"The data entered is not associated with any unionist"+Color.RESET);
                     }
                    break;
                 case 7:
                     System.out.println("Inform the new union fee");
                     Double taxSyndicate= input.nextDouble();
+                    rUndo.SalveTaxservi(Undo.CHANGERTAXSYND, employeelist.get(idname).getTaxSyndicate() , employeelist.get(idname));
                     employeelist.get(idname).setTaxSyndicate(taxSyndicate);
                     break;
                 default:
-                    System.out.println("None of the options were selected, you will return to the start menu");
+                    System.out.println(Color.RED+"None of the options were selected, you will return to the start menu"+Color.RESET);
                     break;
             }
            
         }
         else{
-            System.out.println("The data entered is not associated with any employee");
+            System.out.println(Color.RED+"The data entered is not associated with any employee"+Color.RESET);
         }
     }
     public void pay(){
-        payFunction.payment(employeelist);
+        Calendar date= Calendar.getInstance();
+        int sdate= date.get(Calendar.DAY_OF_MONTH);
+        if(datepay!=sdate){
+            datepay=sdate;
+            rUndo.Salvesalary(Undo.PAY, employeelist);
+            System.out.println(Color.YELLOW+"The employees who will be paid today will be shown below:"+Color.RESET);
+            payFunction.payment(employeelist);
+            System.out.println(Color.YELLOW+"End of today's payment list\n"+Color.RESET);
+        }
+        else{
+            System.out.println(Color.YELLOW+"The payment for the day has already been made.\n"+Color.RESET);
+        }
     }
     public void scheduleoptions(){
-        Scanner input= new Scanner(System.in);
         System.out.println("Select the employee you want to change");
         int idname= AuxEmployee.SearchEmployeeList(employeelist);
         if(idname!=-1){
             payFunction.PaymentSchedule(employeelist.get(idname).getPayment()); 
         }
         else{
-            System.out.println("The data entered is not associated with any employee");
+            System.out.println(Color.RED+"The data entered is not associated with any employee"+Color.RESET);
         }
     }
     public void addSchedule(){
@@ -250,14 +272,14 @@ public class EmployeeList {
     public void undo(){
         int idsyn;
         switch (rUndo.getSoption()){
-            case 1:
+            case Undo.NEWEMP:
                 if(rUndo.getSemployee().getSyndicate()==true){
                     idsyn=AuxEmployee.SeachSyndicate(syndicatelist, rUndo.getSemployee());
                     syndicatelist.remove(idsyn);
                 }
                 employeelist.remove(rUndo.getSemployee());
                 break;
-            case 2:
+            case Undo.REMOVEEMP:
                 if(rUndo.getSemployee().getSyndicate()==true){
                     AuxEmployee.AddSyndicate(employee, syndicatelist, rUndo.getIdsyn());
                     employeelist.add(rUndo.getSemployee());
@@ -266,19 +288,51 @@ public class EmployeeList {
                     employeelist.add(rUndo.getSemployee());
                 }
                 break;
-            case 3:
-                rUndo.Time();
+            case Undo.TIME:
+                rUndo.undoTime();
                 break;
 
-            case 4:
-                rUndo.comission();
+            case Undo.COMISSION:
+                rUndo.undocomission();
                 break;
-            case 5:
-                rUndo.comission();
+            case Undo.TAXSERVICE:
+                rUndo.undotaxService();
+                break;
+            case Undo.CHANGERNAME:
+                rUndo.undoname();
+                break;
+            case Undo.CHANGERADRESS:
+                rUndo.undoadress();
+                break;
+            case Undo.CHANGERTYPE:
+                rUndo.undotype(employeelist, syndicatelist);
+                break;
+            case Undo.CHANGERPAY:
+                rUndo.undopayment();
+                break;
+            case Undo.CHANGERSYND:
+                if(rUndo.getSemployee().getSyndicate()==true){
+                    AuxEmployee.RemoveSyndicate(rUndo.getSemployee(), syndicatelist);
+                }
+                else{
+                    AuxEmployee.AddSyndicate(rUndo.getSemployee(), syndicatelist);
+                }
+                break;
+            case Undo.CHANGERIDSYN:
+                rUndo.undoidsyn(syndicatelist);
+                break;
+            case Undo.CHANGERTAXSYND:
+                rUndo.undotaxsynd();
+                break;
+            case Undo.PAY:
+                rUndo.undosalary(employeelist);
+                datepay=-1;
                 break;
             default:
-                break;
+                System.out.println(Color.RED+"Something went wrong, you will return to the menu."+Color.RESET);
+                return;
         }
+        System.out.println(Color.GREEN+"Your last action was successfully undone."+Color.RESET);
         rUndo.setSoption(-1);
     }
 }

@@ -60,7 +60,7 @@ public class PayFunction {
         System.out.println(employee.getName()+"\n"+employee.getId());
         if(divsion==1) divsion=4;
         else if(divsion==0) divsion=1;
-        System.out.println("The salary amount based on the calculations made is "+employee.payMent(divsion));
+        System.out.println(Color.BLUE+"The salary amount based on the calculations made is "+employee.payMent(divsion)+Color.RESET);
         System.out.println(employee.getPayment().InfoPay());
     }
     private void payString(String day, int week, Employee employee){
@@ -136,7 +136,7 @@ public class PayFunction {
         System.out.println("Choose a date option:");
         int selectoption= input.nextInt();
         if(selectoption>option-1){
-            System.out.println("None of the options were selected, you will return to the start menu");
+            System.out.println(Color.YELLOW+"None of the options were selected, you will return to the start menu"+Color.RESET);
         }
         else{
             payment.setOptionschedule(selectoption);
@@ -173,7 +173,7 @@ public class PayFunction {
         String aux[]= schedule.split(" ");
         if(aux[0].equals("WEEKLY")){
             if(!aux[1].matches("-?\\d+") && !dayweek(aux[2])){
-                System.out.println("Invalid input please inform correctly.");
+                System.out.println(Color.RED+"Invalid input please inform correctly."+Color.RESET);
                 return;
             }
             else{
@@ -183,7 +183,7 @@ public class PayFunction {
         else if(aux[0].equals("MONTLHY")){
 
             if(!aux[1].matches("-?\\d+") && aux[1] != "$"){
-                System.out.println("Invalid input please inform correctly.");
+                System.out.println(Color.RED+"Invalid input please inform correctly."+Color.RESET);
                 return;
             }
             else{
@@ -191,7 +191,7 @@ public class PayFunction {
             }
         }
         else{
-            System.out.println("Invalid input please inform correctly.");
+            System.out.println(Color.RED+"Invalid input please inform correctly."+Color.RESET);
         }
     }
 }

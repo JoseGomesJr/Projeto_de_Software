@@ -31,9 +31,10 @@ public class AuxEmployee {
         Scanner input= new Scanner(System.in);
         int aux=SeachEmployee(name, employees);
         if(aux==-1){
-            System.out.println("Employee name does not exist");
+            System.out.println(Color.RED+"Employee name does not exist"+Color.RESET);
             System.out.println("Would you like to enter a new name\n1-Yes\n2-No");
             int nSelect= input.nextInt();
+            input.nextLine();
             switch (nSelect) {
                 case 1:
                     System.out.println("Enter the new name\nCaution!The employee's name must be entered in the same way it was registered");
@@ -53,7 +54,7 @@ public class AuxEmployee {
         Scanner input= new Scanner(System.in);
         int aux=SeachEmployee(id, employees);
         if(aux==-1){
-            System.out.println("Employee id does not exist");
+            System.out.println(Color.RED+"Employee id does not exist"+Color.RESET);
             System.out.println("Would you like to enter a new id\n1-Yes\n2-No");
             int nSelect= input.nextInt();
             switch (nSelect) {
@@ -94,21 +95,23 @@ public class AuxEmployee {
             int nSelect= input.nextInt();
             switch (nSelect) {
                 case 1:
-                    rUndo.Salvetime(3, 0d, employees.get(id), nSelect);
+                    rUndo.Salvetime(Undo.TIME, 0d, employees.get(id), nSelect);
                     ((Hourly)employees.get(id)).setEntryCard();
+                    System.out.println(Color.GREEN+"Registered entry. Good work!"+Color.RESET);
                     return 1;
                 case 2:
-                    rUndo.Salvetime(3, ((Hourly)employees.get(id)).getPay(), employees.get(id), nSelect);
+                    rUndo.Salvetime(Undo.TIME, ((Hourly)employees.get(id)).getPay(), employees.get(id), nSelect);
                     ((Hourly)employees.get(id)).setExitCard();
                     ((Hourly)employees.get(id)).setHoursDay();
+                    System.out.println(Color.GREEN+"Checkout registered. To the next"+Color.RESET);
                     return 2;
                 default:
-                    System.out.println("None of the options were selected, you will return to the start menu");
+                    System.out.println(Color.YELLOW+"None of the options were selected, you will return to the start menu"+Color.RESET);
                     break;
             }
         }
         else{
-            System.out.println("The employee informed is not an hourly");
+            System.out.println(Color.RED+"The employee informed is not an hourly"+Color.RESET);
         }
         return 0;
     }
@@ -138,13 +141,14 @@ public class AuxEmployee {
                 if(id!=-1)  return id;
                 break;
             case 2:
-                System.out.println("Enter the name\nCaution!The employee's name must be entered in the same way it was registered");
+                System.out.println("Enter the name\n"+ Color.YELLOW+ 
+                "Caution!The employee's name must be entered in the same way it was registered"+Color.RESET);
                 String name= input.nextLine();
                 id= CheckEmployees(employeelist, name);
                 if(id!=-1) return id;
                 break;
             default:
-                System.out.println("None of the options were selected, you will return to the start menu");
+                System.out.println(Color.YELLOW+"None of the options were selected, you will return to the start menu"+Color.RESET);
                 break;
         }
         return id;
@@ -175,7 +179,7 @@ public class AuxEmployee {
             syndicates.remove(aux);
         }
         else{
-            System.out.println("The data entered is not associated with any unionist");
+            System.out.println(Color.RED+"The data entered is not associated with any unionist"+Color.RESET);
         }
     }
     
