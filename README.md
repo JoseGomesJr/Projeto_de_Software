@@ -11,7 +11,7 @@
 - [x] Alterar detalhes de um empregado
 - [x] Rodar a folha de pagamento para hoje
 - [x] Undo
-- [ ] Rendo🛑
+- [ ] Rendo
 - [x] Agenda de Pagamento
 - [x] Criação de Novas Agendas de Pagamento
  
