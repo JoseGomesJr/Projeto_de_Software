@@ -1,17 +1,41 @@
 import java.util.*;
 public class AuxEmployee {
+    private Random gerador = new Random(19904522);
+    private int random;
     public int SeachEmployee (String name, List<Employee> employees){
-        int posi=0, aux=-1;
+        int posi=0, local=0;
+        int aux[]= new int[employees.size()];
+        Scanner input= new Scanner(System.in);
         for(Employee employee: employees)
         {
             if(name.equals(employee.getName()))
             {
-                aux=posi;
-                break;
+                aux[local]=posi;
+                local++;
             }
             posi++;
-        } 
-        return aux;
+        }
+        if(local==0) return -1; 
+        if(local > 1){
+            System.out.println(Color.YELLOW+"For more than one employee with the same name, select the correct one"+Color.RESET);
+            for(int cont=0; cont < local; cont++){
+                System.out.println(cont+" - "+"Name:"+employees.get(aux[cont]).getName()+"\n"+"ID: "+employees.get(aux[cont]).getId()+"\nType: "+
+                employees.get(aux[cont]).typeEmployee());
+            }
+            int nSelect= input.nextInt();
+            if(nSelect >= local || nSelect < 0)
+            {
+                System.out.println(Color.RED+"Invalid option"+Color.RESET);
+                return -1;
+            }
+            else{
+                return aux[nSelect];
+            }
+        }
+        else{
+            return aux[0];
+        }
+
     }
     public int SeachEmployee (int id, List<Employee> employees){
         int posi=0, aux=-1;
@@ -37,7 +61,7 @@ public class AuxEmployee {
             input.nextLine();
             switch (nSelect) {
                 case 1:
-                    System.out.println("Enter the new name\nCaution!The employee's name must be entered in the same way it was registered");
+                    System.out.println(Color.YELLOW+"Enter the new name\nCaution!The employee's name must be entered in the same way it was registered"+Color.RESET);
                     String newName= input.nextLine();
                     return CheckEmployees(employees, newName);
                 default:
@@ -157,7 +181,7 @@ public class AuxEmployee {
         int posi=0, aux=-1;
         for(Syndicate syndicate : syndicates)
         {
-            if(syndicate.getUnionlist().equals(employee))
+            if(syndicate.getUnionlist().equals(employee) && syndicate.getUnionlist().getId()== employee.getId())
             {
                 aux=posi;
                 break;
@@ -181,6 +205,17 @@ public class AuxEmployee {
         else{
             System.out.println(Color.RED+"The data entered is not associated with any unionist"+Color.RESET);
         }
+    }
+    public int random(List<Integer> randons){
+        int random= gerador.nextInt(189773);
+        for(Integer num: randons){
+            if(random == ((int) num)){
+                int randomnew = (int) random(randons);
+                return randomnew;
+            }
+        }
+        randons.add(random);
+        return random;
     }
     
 }

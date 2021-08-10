@@ -6,6 +6,7 @@ public class EmployeeList {
     private PayFunction payFunction= new PayFunction();
     private AuxEmployee AuxEmployee= new AuxEmployee();
     private ChangeEmployee change= new ChangeEmployee();
+    private List<Integer> randons= new ArrayList<>();
     private boolean pay=false;
     private int datepay= -1;
     private Undo rUndo= new Undo();
@@ -19,7 +20,7 @@ public class EmployeeList {
         String adress= input.nextLine();
         System.out.println("Union fee to be charged.");
         Double taxSyndicate= input.nextDouble();
-        int id= employeelist.size();
+        int id= AuxEmployee.random(randons);
 
        System.out.printf("Type Employee:1-Hourly\n2-Salaried\n3-Comissioned\nSelect Number:");
        int num= input.nextInt();
@@ -77,12 +78,12 @@ public class EmployeeList {
         if(id!=-1) {
             if(employeelist.get(id).getSyndicate()==true){
                 idsyn=AuxEmployee.SeachSyndicate(syndicatelist, employeelist.get(id));
-                rUndo.Salvesyndi(Undo.REMOVEEMP, employee, idsyn);
+                rUndo.Salvesyndi(Undo.REMOVEEMP, employeelist.get(id), syndicatelist.get(idsyn).getId());
                 syndicatelist.remove(idsyn);
                 employeelist.remove(id);
             }
             else{
-                rUndo.Salve(Undo.REMOVEEMP, employee);
+                rUndo.Salve(Undo.REMOVEEMP, employeelist.get(id));
                 employeelist.remove(id);
             }
             System.out.println(Color.GREEN+"Employee successfully removed"+Color.RESET);
@@ -149,7 +150,7 @@ public class EmployeeList {
         if(idname!=-1){
             System.out.println("Inform the percentage that should be charged to the employee");
             Double tax= input.nextDouble();
-            rUndo.SalveTaxservi(Undo.TAXSERVICE, employeelist.get(idname).getTaxService(), employee);
+            rUndo.SalveTaxservi(Undo.TAXSERVICE, employeelist.get(idname).getTaxService(), employeelist.get(idname));
             employeelist.get(idname).setTaxService(tax);
 
         }
@@ -281,7 +282,7 @@ public class EmployeeList {
                 break;
             case Undo.REMOVEEMP:
                 if(rUndo.getSemployee().getSyndicate()==true){
-                    AuxEmployee.AddSyndicate(employee, syndicatelist, rUndo.getIdsyn());
+                    AuxEmployee.AddSyndicate(rUndo.getSemployee(), syndicatelist, rUndo.getIdsyn());
                     employeelist.add(rUndo.getSemployee());
                 }
                 else{

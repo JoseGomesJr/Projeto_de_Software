@@ -5,7 +5,7 @@ public class App {
         Scanner input= new Scanner(System.in);
         int nSelect=0;
         do
-        {
+        {   System.out.println(Color.GREEN+"Main selection menu"+Color.RESET);
             System.out.println("Selection Option:");
             System.out.println("1-New employee");
             System.out.println("2-Remove employee");
