@@ -1,5 +1,6 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
-
 public class Undo {
     //Acões que foram efetuadas
     public static final int NEWEMP=1;
@@ -16,195 +17,278 @@ public class Undo {
     public static final int CHANGERTAXSYND=67;
     public static final int PAY=7;
     //Meta dados a serem salvos para possivel retrocesso
-    private Employee semployee;
-    private String sname;
-    private int sobj;
-    private int soption;
-    private int idsyn;
-    private Double spay;
-    private Double commission;
-    private PaymentMethod spayment;
-    private Double taxsynd;
-    private List<Double> comission;
-    private List<Double> taxservice;
-    private List<Double> payhour;
+    private LinkedList<History> history= new LinkedList<>();
     public void Salve(int option, String name, Employee employee){
-        this.soption= option;
-        this.sname= name;
-        this.semployee= employee;
+        History hist= new History();
+        hist.soption= option;
+        hist.sname= name;
+        hist.semployee= employee;
+        this.history.add(hist);
     }
     public void Salve(int option, Employee nEmployee){
-        this.semployee= nEmployee;
-        this.soption= option;
+        History hist= new History();
+        hist.semployee= nEmployee;
+        hist.soption= option;
+        this.history.add(hist);
     }
     public void Salvesyndi(int option, Employee nEmployee, int idsyn){
-        this.semployee= nEmployee;
-        this.soption= option;
-        this.idsyn= idsyn;
+        History hist= new History();
+        hist.semployee= nEmployee;
+        hist.soption= option;
+        hist.idsyn= idsyn;
+        this.history.add(hist);
     }
-    public void Salvecommission(int option, Double comission, String date, Employee employee){
-        this.soption=option;
-        this.commission= comission;
-        this.sname= date;
-        this.semployee= employee;
+    public void Salvecommission(int option, Double comission, List<String> date, Employee employee){
+        History hist= new History();
+        hist.soption=option;
+        hist.commission= comission;
+        hist.date= date;
+        hist.semployee= employee;
+        this.history.add(hist);
     }
     public void SalveTaxservi(int option, Double tax, Employee employee){
-        this.soption=option;
-        this.semployee= employee;
-        this.spay= tax;
+        History hist= new History();
+        hist.soption=option;
+        hist.semployee= employee;
+        hist.spay= tax;
+        this.history.add(hist);
     }
     public void Salvetime(int option,Double pay, Employee employee, int aux){
-        this.sobj=aux;
-        this.semployee=employee;
-        this.soption=option;
+        History hist= new History();
+        hist.sobj=aux;
+        hist.semployee=employee;
+        hist.soption=option;
         if(aux == 2){
-            this.spay= pay;
+            hist.spay= pay;
         }
+        this.history.add(hist);
+    }
+    public void Salvetime(int option,Double pay, Employee employee, int aux, Date date, LocalTime datetime){
+        History hist= new History();
+        hist.sobj=aux;
+        hist.semployee=employee;
+        hist.soption=option;
+        hist.datehours= date;
+        hist.datetimehours= datetime;
+        if(aux == 2){
+            hist.spay= pay;
+        }
+        this.history.add(hist);
     }
     public void Salvepay(int option, PaymentMethod pay, Employee employee){
-        this.soption=option;
-        this.semployee= employee;
-        this.spayment= pay;
+        History hist= new History();
+        hist.soption=option;
+        hist.semployee= employee;
+        hist.spayment= pay;
+        this.history.add(hist);
     }
     public void Salveidsyn(int option, int idsyn, int sobj){
-        this.soption= option;
-        this.idsyn= idsyn;
-        this.sobj= sobj;
+        History hist= new History();
+        hist.soption= option;
+        hist.idsyn= idsyn;
+        hist.sobj= sobj;
+        this.history.add(hist);
     }
     public void Salvesalary(int option,List<Employee> employeelist){
-        this.soption=option;
-        this.comission= new ArrayList<>();
-        this.payhour= new ArrayList<>();
-        this.taxservice= new ArrayList<>();
+        History hist= new History();
+        hist.soption=option;
+        hist.comission= new ArrayList<>();
+        hist.payhour= new ArrayList<>();
+        hist.taxservice= new ArrayList<>();
         for(Employee employee: employeelist){
             switch (employee.typeEmployee()) {
                 case "Hourly":
                     Double aux_pay= ((Hourly) employee).getPay();
-                    this.payhour.add(aux_pay);
-                    this.taxservice.add(employee.getTaxService());
+                    hist.payhour.add(aux_pay);
+                    hist.taxservice.add(employee.getTaxService());
                     break;
                 case "Commssioned":
                     Double aux_commission= ((Commissioned) employee).getComissionTotal();
-                    this.comission.add(aux_commission);
-                    this.taxservice.add(employee.getTaxService());
+                    hist.comission.add(aux_commission);
+                    hist.taxservice.add(employee.getTaxService());
                     break;
                 case "Salaried":
-                    this.taxservice.add(employee.getTaxService());
+                    hist.taxservice.add(employee.getTaxService());
                     break;
                 default:
                     break;
             }
         }
+        this.history.add(hist);
     }
     public void undoTime(){
-        if(this.sobj==1){
-            if(semployee.typeEmployee().equals("Hourly")){
-                ((Hourly)semployee).resetEntry();
+        History hist = this.history.getLast();
+        if(hist.sobj==1){
+            if(hist.semployee.typeEmployee().equals("Hourly")){
+                ((Hourly)hist.semployee).resetEntry();
             }else{
                 System.out.println("Something went wrong!");
             }
         }
-        else if(this.sobj==2){
-            if(semployee.typeEmployee().equals("Hourly")){
-                ((Hourly)semployee).resetExit();
-                ((Hourly)semployee).setPay(this.spay);
-                this.spay=0d;
+        else if(hist.sobj==2){
+            if(hist.semployee.typeEmployee().equals("Hourly")){
+                ((Hourly)hist.semployee).resetExit();
+                ((Hourly)hist.semployee).setPay(hist.spay);
+                hist.spay=0d;
             }else{
                 System.out.println("Something went wrong!");
             }
         }
+        this.history.removeLast();
+    }
+    public void redotime(){
+        History hist = this.history.getLast();
+        if(hist.sobj==1){
+            if(hist.semployee.typeEmployee().equals("Hourly")){
+                ((Hourly)hist.semployee).getCard().setDate(hist.datehours);
+                ((Hourly)hist.semployee).getCard().setEntraDate(hist.datetimehours);
+            }else{
+                System.out.println("Something went wrong!");
+            }
+        }
+        else if(hist.sobj==2){
+            if(hist.semployee.typeEmployee().equals("Hourly")){
+                ((Hourly)hist.semployee).getCard().setExitdate(hist.datehours);
+                ((Hourly)hist.semployee).getCard().setExiDate(hist.datetimehours);
+                ((Hourly)hist.semployee).setPay(hist.spay);
+                hist.spay=0d;
+            }else{
+                System.out.println("Something went wrong!");
+            }
+        }
+        this.history.removeLast();
     }
     public void undocomission(){
-        if(semployee.typeEmployee().equals("Commssioned")){
-            ((Commissioned) semployee).setComissionTotal(commission);
-            ((Commissioned) semployee).removdate(sname);
+        History hist = this.history.getLast();
+        if(hist.semployee.typeEmployee().equals("Commssioned")){
+            ((Commissioned) hist.semployee).setComissionTotal(hist.commission);
+            ((Commissioned) hist.semployee).removdate(hist.sname);
             
         }else{
             System.out.println("Something went wrong!");
         }
+        this.history.removeLast();
     }
     public void undotaxService(){
-        semployee.setTaxService(spay);
+        History hist = this.history.getLast();
+        hist.semployee.setTaxService(hist.spay);
+        this.history.removeLast();
     }
     public void undoname(){
-        semployee.setName(sname);
+        History hist = this.history.getLast();
+        hist.semployee.setName(hist.sname);
+        this.history.removeLast();
     }
     public void undoadress(){
-        semployee.setAdress(sname);
+        History hist = this.history.getLast();
+        hist.semployee.setAdress(hist.sname);
+        this.history.removeLast();
     }
     public void undotype( List<Employee> employees, List<Syndicate> syndicates){
         int posi=0;
+        History hist = this.history.getLast();
         for(Employee employee: employees){
-            if(semployee.getName().equals(employee.getName()) && semployee.getId()==employee.getId()){
+            if(hist.semployee.getName().equals(employee.getName()) && hist.semployee.getId()==employee.getId()){
                 employees.remove(posi);
-                employees.add(posi, semployee);
+                employees.add(posi, hist.semployee);
             }
             posi++;
         }
         posi=0;
-        if(semployee.getSyndicate()){
+        if(hist.semployee.getSyndicate()){
             for(Syndicate syndicate: syndicates){
-                if(semployee.getName().equals(syndicate.getUnionlist().getName()) && semployee.getId()==syndicate.getUnionlist().getId()){
-                    syndicates.get(posi).setUnionlist(semployee);
+                if(hist.semployee.getName().equals(syndicate.getUnionlist().getName()) && 
+                hist.semployee.getId()==syndicate.getUnionlist().getId()){
+
+                    syndicates.get(posi).setUnionlist(hist.semployee);
                 }
                 posi++;
             }
         }
+        this.history.removeLast();
     }
     public void undopayment(){
-        this.semployee.setPayment(this.spayment);
+        History hist = this.history.getLast();
+        hist.semployee.setPayment(hist.spayment);
+        this.history.removeLast();
     }
     public void undoidsyn(List<Syndicate> syndicatelist){
-        syndicatelist.get(this.sobj).setId(this.idsyn);
+        History hist = this.history.getLast();
+        syndicatelist.get(hist.sobj).setId(hist.idsyn);
+        this.history.removeLast();
     }
     public void undotaxsynd(){
-        this.semployee.setTaxSyndicate(this.taxsynd);
+        History hist = this.history.getLast();
+        hist.semployee.setTaxSyndicate(hist.taxsynd);
+        this.history.removeLast();
     }
     public void undosalary(List<Employee> employeelist){
+        History hist = this.history.getLast();
         int posipay=0;
         int positax=0;
         int posicomission=0;
         for(Employee employee: employeelist){
             switch (employee.typeEmployee()){
                 case "Hourly":
-                    Double aux_pay=this.payhour.get(posipay);
+                    Double aux_pay=hist.payhour.get(posipay);
                     ((Hourly) employee).setPay(aux_pay);
-                    employee.setTaxService(this.taxservice.get(positax));
+                    employee.setTaxService(hist.taxservice.get(positax));
                     posipay++;
                     positax++;
                     break;
                 case "Commssioned":
-                    Double aux_commission=this.comission.get(posicomission); 
+                    Double aux_commission=hist.comission.get(posicomission); 
                     ((Commissioned) employee).setComissionTotal(aux_commission);
-                    employee.setTaxService(this.taxservice.get(positax));
+                    employee.setTaxService(hist.taxservice.get(positax));
                     posicomission++;
                     positax++;
                     break;
                 case "Salaried":
-                    employee.setTaxService(this.taxservice.get(positax));
+                    employee.setTaxService(hist.taxservice.get(positax));
                     positax++;
                     break;
                 default:
                     break;
             }
         }
+        this.history.removeLast();
     }
     public Employee getSemployee() {
-        return semployee;
+        return history.getLast().semployee;
     }
     public int getSoption() {
-        return soption;
+        return history.getLast().soption;
     }
     public int getIdsyn() {
-        return idsyn;
+        return history.getLast().idsyn;
     }
     public Double getSpay() {
-        return spay;
+        return history.getLast().spay;
     }
     public int getSobj() {
-        return sobj;
+        return history.getLast().sobj;
     }
-    public void setSoption(int soption) {
-        this.soption = soption;
+    public void removelast(){
+        this.history.removeLast();
+    }
+    public boolean list(){
+        if(this.history.size()==0) return false;
+        else return true;
+    }
+    public void setHistory(LinkedList<History> history) {
+        this.history = history;
+    }
+    public History getLast(){
+        return this.history.getLast();
+    }
+    public void addHistory(History hist){
+        this.history.add(hist);
+    }
+    public void rendo(History hist){
+        History histrendo= new History();
+        histrendo.soption= hist.soption;
+        histrendo.semployee= hist.semployee;
+        histrendo.sname = hist.semployee.getName();
+        histrendo.sobj= hist.sobj;
     }
 }

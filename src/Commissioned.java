@@ -4,7 +4,7 @@ public class Commissioned extends Employee {
     private Double monthly_salary;
     private Double commission;
     private Double comissionTotal;
-    private List<String> dates= new ArrayList<>();
+    private ArrayList<String> dates= new ArrayList<>();
     Commissioned(String name, String adress, int id, Double salary, Double commission, Double taxSyndicate)
     {
         super(name, adress, id, taxSyndicate);

@@ -34,5 +34,28 @@ public class TimeCard {
         this.exiDate=null;
         this.exitdate=null;
     }
-
+    public LocalTime getEntraDate() {
+        return entraDate;
+    }
+    public Date getDate() {
+        return date;
+    }
+    public LocalTime getExiDate() {
+        return exiDate;
+    }
+    public Date getExitdate() {
+        return exitdate;
+    }
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    public void setEntraDate(LocalTime entraDate) {
+        this.entraDate = entraDate;
+    }
+    public void setExiDate(LocalTime exiDate) {
+        this.exiDate = exiDate;
+    }
+    public void setExitdate(Date exitdate) {
+        this.exitdate = exitdate;
+    }
 }
